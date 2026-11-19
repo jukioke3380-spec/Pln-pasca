@@ -14,10 +14,10 @@ import { HistoryTab } from './components/HistoryTab';
 import { generateRandomReceipt } from './utils/ocr';
 
 const DEFAULT_SETTINGS: AppSettings = {
-  defaultCustomerName: 'BATARA BEKASI',
+  defaultCustomerName: 'ERFAI',
   loketTitle: 'LOKET PPOB ATHAR DIGITAL PAYMENT',
   loketAddress: 'JL Raya Bapuhbandung glagah',
-  adminFee: 5000,
+  adminFee: 0,
 };
 
 export default function App() {

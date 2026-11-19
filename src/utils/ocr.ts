@@ -124,7 +124,7 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
   if (!idpel) idpel = '518030613503';
   if (!namaPelanggan) namaPelanggan = defaultCustomerName || 'ERFAI';
   if (!tarifDaya) tarifDaya = 'R1 / 450 VA';
-  if (!blnThn) blnThn = 'NOV26';
+  if (!blnThn) blnThn = 'NOV 26';
   if (!standMeter) standMeter = '00027660-00027775';
   if (rpTagPln === 0) rpTagPln = 52850;
   if (!noRef) noRef = '2611193235680534';
@@ -148,7 +148,7 @@ export function generateRandomReceipt(defaultCustomerName = 'ERFAI'): ReceiptDat
   const idpel = '518030613503';
   const namaPelanggan = defaultCustomerName || 'ERFAI';
   const tarifDaya = 'R1 / 450 VA';
-  const blnThn = 'NOV26';
+  const blnThn = 'NOV 26';
   const standMeter = '00027660-00027775';
   const rpTagPln = 52850;
   const adminBank = 5000;

@@ -17,7 +17,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   defaultCustomerName: 'ERFAI',
   loketTitle: 'LOKET PPOB ATHAR DIGITAL PAYMENT',
   loketAddress: 'JL Raya Bapuhbandung glagah',
-  adminFee: 0,
+  adminFee: 5000,
 };
 
 export default function App() {

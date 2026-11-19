@@ -151,7 +151,7 @@ export function generateRandomReceipt(defaultCustomerName = 'ERFAI'): ReceiptDat
   const blnThn = 'NOV26';
   const standMeter = '00027660-00027775';
   const rpTagPln = 52850;
-  const adminBank = 0; // matching UOB TMRW admin Rp 0
+  const adminBank = 5000;
   const totalBayar = rpTagPln + adminBank;
 
   return {

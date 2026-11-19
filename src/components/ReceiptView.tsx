@@ -16,82 +16,82 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ receipt, settings, inn
     <div
       ref={innerRef}
       id="receipt-print-area"
-      className="w-full max-w-sm mx-auto bg-white text-slate-900 p-6 rounded-2xl shadow-xl border border-slate-200 font-mono text-xs leading-relaxed select-none"
-      style={{ fontFamily: '"Courier New", Courier, monospace' }}
+      className="w-full max-w-sm mx-auto bg-white text-black p-6 rounded-2xl shadow-2xl border-2 border-slate-300 font-mono text-sm sm:text-base font-bold leading-normal select-none"
+      style={{ fontFamily: '"Courier New", Courier, monospace', fontWeight: 700 }}
     >
       {/* Header */}
-      <div className="text-center border-b border-dashed border-slate-300 pb-3 mb-3">
-        <h2 className="text-sm font-bold tracking-wider text-sky-900">{settings.loketTitle}</h2>
-        <p className="text-[10px] text-slate-600 mt-0.5">{settings.loketAddress}</p>
+      <div className="text-center border-b-2 border-dashed border-black pb-3 mb-3">
+        <h2 className="text-base sm:text-lg font-black tracking-wider text-black">{settings.loketTitle}</h2>
+        <p className="text-xs sm:text-sm text-black font-bold mt-0.5">{settings.loketAddress}</p>
       </div>
 
-      <div className="text-center font-bold text-xs tracking-wide py-1 mb-3 bg-sky-50 text-sky-900 rounded">
+      <div className="text-center font-black text-sm sm:text-base tracking-wide py-1.5 mb-3 bg-black text-white rounded">
         STRUK PEMBAYARAN TAGIHAN LISTRIK
       </div>
 
       {/* Details with Colon separator */}
-      <div className="space-y-1.5 text-xs mb-3 border-b border-dashed border-slate-300 pb-3">
-        <div className="grid grid-cols-[95px_12px_1fr] items-start">
-          <span className="text-slate-600">Tgl / Waktu</span>
-          <span className="text-center">:</span>
-          <span className="font-semibold">{receipt.tanggal}</span>
+      <div className="space-y-2 text-sm sm:text-base mb-3 border-b-2 border-dashed border-black pb-3 text-black font-bold">
+        <div className="grid grid-cols-[110px_12px_1fr] items-start">
+          <span className="text-black font-black">Tgl / Waktu</span>
+          <span className="text-center font-black">:</span>
+          <span className="text-black font-bold">{receipt.tanggal}</span>
         </div>
-        <div className="grid grid-cols-[95px_12px_1fr] items-start">
-          <span className="text-slate-600">No. Ref</span>
-          <span className="text-center">:</span>
-          <span className="font-semibold">{receipt.noRef}</span>
+        <div className="grid grid-cols-[110px_12px_1fr] items-start">
+          <span className="text-black font-black">No. Ref</span>
+          <span className="text-center font-black">:</span>
+          <span className="text-black font-bold">{receipt.noRef}</span>
         </div>
-        <div className="grid grid-cols-[95px_12px_1fr] items-start">
-          <span className="text-slate-600">IDPel</span>
-          <span className="text-center">:</span>
-          <span className="font-bold text-sky-700">{receipt.idpel}</span>
+        <div className="grid grid-cols-[110px_12px_1fr] items-start">
+          <span className="text-black font-black">IDPel</span>
+          <span className="text-center font-black">:</span>
+          <span className="text-black font-black">{receipt.idpel}</span>
         </div>
-        <div className="grid grid-cols-[95px_12px_1fr] items-start">
-          <span className="text-slate-600">Nama</span>
-          <span className="text-center">:</span>
-          <span className="font-bold text-slate-900 uppercase">{receipt.namaPelanggan}</span>
+        <div className="grid grid-cols-[110px_12px_1fr] items-start">
+          <span className="text-black font-black">Nama</span>
+          <span className="text-center font-black">:</span>
+          <span className="text-black font-black uppercase">{receipt.namaPelanggan}</span>
         </div>
-        <div className="grid grid-cols-[95px_12px_1fr] items-start">
-          <span className="text-slate-600">Tarif / Daya</span>
-          <span className="text-center">:</span>
-          <span className="font-semibold">{receipt.tarifDaya}</span>
+        <div className="grid grid-cols-[110px_12px_1fr] items-start">
+          <span className="text-black font-black">Tarif / Daya</span>
+          <span className="text-center font-black">:</span>
+          <span className="text-black font-bold">{receipt.tarifDaya}</span>
         </div>
-        <div className="grid grid-cols-[95px_12px_1fr] items-start">
-          <span className="text-slate-600">BLN / THN</span>
-          <span className="text-center">:</span>
-          <span>{receipt.blnThn}</span>
+        <div className="grid grid-cols-[110px_12px_1fr] items-start">
+          <span className="text-black font-black">BLN / THN</span>
+          <span className="text-center font-black">:</span>
+          <span className="text-black font-bold">{receipt.blnThn}</span>
         </div>
-        <div className="grid grid-cols-[95px_12px_1fr] items-start">
-          <span className="text-slate-600">Stand Meter</span>
-          <span className="text-center">:</span>
-          <span>{receipt.standMeter}</span>
+        <div className="grid grid-cols-[110px_12px_1fr] items-start">
+          <span className="text-black font-black">Stand Meter</span>
+          <span className="text-center font-black">:</span>
+          <span className="text-black font-bold">{receipt.standMeter}</span>
         </div>
       </div>
 
       {/* Financials */}
-      <div className="space-y-1.5 text-xs mb-3 border-b border-dashed border-slate-300 pb-3">
-        <div className="grid grid-cols-[95px_12px_1fr] items-start">
-          <span className="text-slate-600">Rp Tag PLN</span>
-          <span className="text-center">:</span>
-          <span>{formatCurrency(receipt.rpTagPln)}</span>
+      <div className="space-y-2 text-sm sm:text-base mb-3 border-b-2 border-dashed border-black pb-3 text-black font-bold">
+        <div className="grid grid-cols-[110px_12px_1fr] items-start">
+          <span className="text-black font-black">Rp Tag PLN</span>
+          <span className="text-center font-black">:</span>
+          <span className="text-black font-bold">{formatCurrency(receipt.rpTagPln)}</span>
         </div>
-        <div className="grid grid-cols-[95px_12px_1fr] items-start">
-          <span className="text-slate-600">Admin Bank</span>
-          <span className="text-center">:</span>
-          <span>{formatCurrency(receipt.adminBank)}</span>
+        <div className="grid grid-cols-[110px_12px_1fr] items-start">
+          <span className="text-black font-black">Admin Bank</span>
+          <span className="text-center font-black">:</span>
+          <span className="text-black font-bold">{formatCurrency(receipt.adminBank)}</span>
         </div>
       </div>
 
       {/* Total */}
-      <div className="flex justify-between items-center text-sm font-bold bg-sky-100 text-sky-950 p-2.5 rounded-lg mb-4">
+      <div className="flex justify-between items-center text-base sm:text-lg font-black bg-black text-white p-3 rounded-xl mb-4">
         <span>TOTAL BAYAR :</span>
-        <span className="text-base text-sky-700">{formatCurrency(receipt.totalBayar)}</span>
+        <span className="text-white font-black">{formatCurrency(receipt.totalBayar)}</span>
       </div>
 
       {/* Footer */}
-      <div className="text-center text-[10px] text-slate-500 space-y-1">
+      <div className="text-center text-xs sm:text-sm text-black font-black space-y-1">
         <p className="uppercase">Simpan struk ini sebagai bukti pembayaran yang sah.</p>
-        <p className="font-bold text-slate-700">TERIMAKASIH</p>
+        <p className="font-black text-black">TERIMAKASIH</p>
       </div>
     </div>
   );

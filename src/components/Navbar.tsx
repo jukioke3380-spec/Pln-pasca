@@ -1,0 +1,190 @@
+import React, { useEffect, useState } from 'react';
+import { Camera, Edit3, Printer, Settings as SettingsIcon, History as HistoryIcon, Download } from 'lucide-react';
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
+export function usePWAInstall() {
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+
+  useEffect(() => {
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as unknown as { standalone?: boolean }).standalone === true;
+    setIsInstalled(isStandalone);
+
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
+    setIsIOS(isIOSDevice);
+
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+    };
+
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const install = async () => {
+    if (!deferredPrompt) return false;
+    await deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+      return true;
+    }
+    return false;
+  };
+
+  return { isInstallable: !!deferredPrompt, isInstalled, isIOS, install };
+}
+
+export const PWAInstallButton: React.FC = () => {
+  const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
+  const [showIOSGuide, setShowIOSGuide] = useState(false);
+
+  if (isInstalled) return null;
+
+  if (isInstallable) {
+    return (
+      <button
+        onClick={install}
+        className="flex items-center gap-1.5 rounded-lg bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-sky-700 transition"
+      >
+        <Download className="w-3.5 h-3.5" />
+        Install App
+      </button>
+    );
+  }
+
+  if (isIOS) {
+    return (
+      <>
+        <button
+          onClick={() => setShowIOSGuide(true)}
+          className="flex items-center gap-1.5 rounded-lg border border-sky-300 px-3 py-1.5 text-xs font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 transition"
+        >
+          <Download className="w-3.5 h-3.5" />
+          Install iOS
+        </button>
+
+        {showIOSGuide && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900 text-left">
+              <h3 className="text-base font-bold text-gray-900 dark:text-white">Install di iPhone / iPad</h3>
+              <p className="mt-2 text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                1. Ketuk tombol <strong>Share</strong> (Bagikan) di toolbar browser Safari.<br />
+                2. Gulir ke bawah lalu ketuk <strong>Add to Home Screen</strong> (Tambah ke Layar Utama).
+              </p>
+              <button
+                onClick={() => setShowIOSGuide(false)}
+                className="mt-4 w-full rounded-xl bg-sky-600 py-2.5 text-xs font-semibold text-white hover:bg-sky-700 transition"
+              >
+                Mengerti
+              </button>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  return null;
+};
+
+interface NavbarProps {
+  activeTab: 'scan' | 'preview' | 'printer' | 'settings' | 'history';
+  onTabChange: (tab: 'scan' | 'preview' | 'printer' | 'settings' | 'history') => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange }) => {
+  return (
+    <>
+      {/* Top Header Bar */}
+      <header className="sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-600 to-blue-500 text-white flex items-center justify-center font-bold shadow-sm">
+            ⚡
+          </div>
+          <div>
+            <h1 className="text-sm font-bold tracking-tight text-slate-900 dark:text-white">Struk Listrik PLN</h1>
+            <p className="text-[10px] text-slate-500">PPOB Thermal PWA</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <PWAInstallButton />
+        </div>
+      </header>
+
+      {/* Bottom Navigation Bar */}
+      <nav aria-label="Bottom Navigation" className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-1.5 flex items-center justify-around shadow-lg">
+        <button
+          onClick={() => onTabChange('scan')}
+          className={`flex flex-col items-center justify-center w-16 py-1 rounded-xl transition ${
+            activeTab === 'scan' ? 'text-sky-600 font-bold' : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          <Camera className="w-5 h-5 mb-1" />
+          <span className="text-[10px]">Scan</span>
+        </button>
+
+        <button
+          onClick={() => onTabChange('preview')}
+          className={`flex flex-col items-center justify-center w-16 py-1 rounded-xl transition ${
+            activeTab === 'preview' ? 'text-sky-600 font-bold' : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          <Edit3 className="w-5 h-5 mb-1" />
+          <span className="text-[10px]">Struk</span>
+        </button>
+
+        <button
+          onClick={() => onTabChange('printer')}
+          className={`flex flex-col items-center justify-center w-16 py-1 rounded-xl transition ${
+            activeTab === 'printer' ? 'text-sky-600 font-bold' : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          <Printer className="w-5 h-5 mb-1" />
+          <span className="text-[10px]">Printer</span>
+        </button>
+
+        <button
+          onClick={() => onTabChange('history')}
+          className={`flex flex-col items-center justify-center w-16 py-1 rounded-xl transition ${
+            activeTab === 'history' ? 'text-sky-600 font-bold' : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          <HistoryIcon className="w-5 h-5 mb-1" />
+          <span className="text-[10px]">Riwayat</span>
+        </button>
+
+        <button
+          onClick={() => onTabChange('settings')}
+          className={`flex flex-col items-center justify-center w-16 py-1 rounded-xl transition ${
+            activeTab === 'settings' ? 'text-sky-600 font-bold' : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          <SettingsIcon className="w-5 h-5 mb-1" />
+          <span className="text-[10px]">Atur</span>
+        </button>
+      </nav>
+    </>
+  );
+};

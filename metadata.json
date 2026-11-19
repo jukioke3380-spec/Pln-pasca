@@ -1,0 +1,6 @@
+{
+  "name": "Struk Pembayaran Tagihan Listrik PWA",
+  "description": "Aplikasi PWA responsif untuk pemindaian OCR bukti pembayaran tagihan listrik PLN, cetak printer thermal Bluetooth, dan share gambar resi struk.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

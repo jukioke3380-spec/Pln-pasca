@@ -23,9 +23,6 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ receipt, settings, inn
       <div className="text-center border-b border-dashed border-slate-300 pb-3 mb-3">
         <h2 className="text-sm font-bold tracking-wider text-sky-900">{settings.loketTitle}</h2>
         <p className="text-[10px] text-slate-600 mt-0.5">{settings.loketAddress}</p>
-        {settings.agentName && (
-          <p className="text-[10px] text-slate-700 font-bold mt-1">AGEN: {settings.agentName}</p>
-        )}
       </div>
 
       <div className="text-center font-bold text-xs tracking-wide py-1 mb-2 bg-sky-50 text-sky-900 rounded">

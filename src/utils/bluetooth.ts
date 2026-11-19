@@ -88,9 +88,6 @@ export async function printReceiptThermal(receipt: ReceiptData, settings: AppSet
     printText += ALIGN_CENTER;
     printText += BOLD_ON + `${settings.loketTitle}\n` + BOLD_OFF;
     printText += `${settings.loketAddress}\n`;
-    if (settings.agentName) {
-      printText += `AGEN: ${settings.agentName}\n`;
-    }
     printText += '--------------------------------\n';
     printText += BOLD_ON + 'STRUK PEMBAYARAN TAGIHAN LISTRIK\n' + BOLD_OFF;
     printText += '--------------------------------\n';

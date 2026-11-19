@@ -22,7 +22,7 @@ export const ScanTab: React.FC<ScanTabProps> = ({ onReceiptScanned, settings }) 
     setProgressText('Memproses gambar dengan OCR Tesseract...');
 
     try {
-      const extracted = await recognizeReceiptImage(file, (prog, status) => {
+      const extracted = await recognizeReceiptImage(file, settings.defaultCustomerName, (prog, status) => {
         setProgressText(`${status} (${Math.round(prog * 100)}%)`);
       });
 
@@ -31,7 +31,7 @@ export const ScanTab: React.FC<ScanTabProps> = ({ onReceiptScanned, settings }) 
         tanggal: extracted.tanggal || new Date().toISOString().replace('T', ' ').substring(0, 19),
         noRef: extracted.noRef || 'REF' + Math.floor(100000000 + Math.random() * 900000000),
         idpel: extracted.idpel || '54210' + Math.floor(1000000 + Math.random() * 9000000),
-        namaPelanggan: extracted.namaPelanggan || 'PELANGGAN PLN',
+        namaPelanggan: extracted.namaPelanggan || settings.defaultCustomerName,
         tarifDaya: extracted.tarifDaya || 'R1/1300VA',
         blnThn: extracted.blnThn || '02/26',
         standMeter: extracted.standMeter || '001245-001389',
@@ -49,7 +49,7 @@ export const ScanTab: React.FC<ScanTabProps> = ({ onReceiptScanned, settings }) 
       alert('Gagal membaca teks dari gambar. Silakan gunakan data contoh atau masukkan manual.');
       
       // Fallback random
-      const fallback = generateRandomReceipt();
+      const fallback = generateRandomReceipt(settings.defaultCustomerName);
       fallback.adminBank = settings.adminFee;
       fallback.totalBayar = fallback.rpTagPln + settings.adminFee;
       onReceiptScanned(fallback);
@@ -63,7 +63,7 @@ export const ScanTab: React.FC<ScanTabProps> = ({ onReceiptScanned, settings }) 
   };
 
   const handleGenerateSample = () => {
-    const sample = generateRandomReceipt();
+    const sample = generateRandomReceipt(settings.defaultCustomerName);
     sample.adminBank = settings.adminFee;
     sample.totalBayar = sample.rpTagPln + settings.adminFee;
     onReceiptScanned(sample);

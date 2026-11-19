@@ -44,13 +44,13 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({ settings, onUpdateSett
 
         <div>
           <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
-            <Store className="w-4 h-4 text-sky-600" /> Nama Agen (Default)
+            <Store className="w-4 h-4 text-sky-600" /> Nama Pelanggan (Default)
           </label>
           <input
             type="text"
-            value={formData.agentName}
-            onChange={(e) => setFormData({ ...formData, agentName: e.target.value })}
-            className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+            value={formData.defaultCustomerName}
+            onChange={(e) => setFormData({ ...formData, defaultCustomerName: e.target.value })}
+            className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white uppercase font-bold"
             required
           />
         </div>

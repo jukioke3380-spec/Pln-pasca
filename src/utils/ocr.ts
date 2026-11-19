@@ -3,6 +3,7 @@ import { ReceiptData } from '../types';
 
 export async function recognizeReceiptImage(
   imageSource: string | File | Blob,
+  defaultCustomerName = 'BATARA BEKASI',
   onProgress?: (progress: number, status: string) => void
 ): Promise<Partial<ReceiptData>> {
   const worker = await createWorker('ind+eng');
@@ -21,7 +22,7 @@ export async function recognizeReceiptImage(
 
     await worker.terminate();
 
-    return parseReceiptText(text);
+    return parseReceiptText(text, defaultCustomerName);
   } catch (err) {
     await worker.terminate();
     console.error('OCR Error:', err);
@@ -29,7 +30,7 @@ export async function recognizeReceiptImage(
   }
 }
 
-function parseReceiptText(text: string): Partial<ReceiptData> {
+function parseReceiptText(text: string, defaultCustomerName = 'BATARA BEKASI'): Partial<ReceiptData> {
   const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
   
   let idpel = '';
@@ -63,9 +64,7 @@ function parseReceiptText(text: string): Partial<ReceiptData> {
       if (match) {
         namaPelanggan = match[1].trim();
       } else if (line.toUpperCase() === line && line.length > 5 && !line.includes('PLN') && !line.includes('LOKET')) {
-        // Fallback potential name line if all caps
         if (/^[A-Z\s,.]+$/.test(line) && !line.includes('RP') && !line.includes('TANGGAL')) {
-          // Check if it looks like a name
           if (line.split(' ').length >= 2) {
             namaPelanggan = line;
           }
@@ -106,7 +105,7 @@ function parseReceiptText(text: string): Partial<ReceiptData> {
 
   // Fallbacks if OCR misses some fields
   if (!idpel) idpel = '54210' + Math.floor(1000000 + Math.random() * 9000000);
-  if (!namaPelanggan) namaPelanggan = 'BATARA BEKASI';
+  if (!namaPelanggan) namaPelanggan = defaultCustomerName || 'BATARA BEKASI';
   if (!tarifDaya) tarifDaya = 'R1/1300VA';
   if (!blnThn) {
     const d = new Date();
@@ -130,23 +129,13 @@ function parseReceiptText(text: string): Partial<ReceiptData> {
   };
 }
 
-export function generateRandomReceipt(): ReceiptData {
+export function generateRandomReceipt(defaultCustomerName = 'BATARA BEKASI'): ReceiptData {
   const d = new Date();
   const tanggal = d.toISOString().replace('T', ' ').substring(0, 19);
   const noRef = 'REF' + Math.floor(100000000 + Math.random() * 900000000);
   const idpel = '54' + Math.floor(1000000000 + Math.random() * 9000000000);
   
-  const names = [
-    'BATARA BEKASI',
-    'BUDI SANTOSO', 
-    'SITI AMINAH', 
-    'AHMAD HIDAYAT', 
-    'DEWI LESTARI', 
-    'HENDRA KURNIAWAN', 
-    'SRI WAHYUNI',
-    'JOKO SUSILO'
-  ];
-  const namaPelanggan = names[0]; // Default or random
+  const namaPelanggan = defaultCustomerName || 'BATARA BEKASI';
   
   const tariffs = ['R1/900VA', 'R1M/1300VA', 'R1/2200VA', 'B2/3500VA'];
   const tarifDaya = tariffs[Math.floor(Math.random() * tariffs.length)];

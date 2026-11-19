@@ -14,7 +14,7 @@ import { HistoryTab } from './components/HistoryTab';
 import { generateRandomReceipt } from './utils/ocr';
 
 const DEFAULT_SETTINGS: AppSettings = {
-  agentName: '',
+  defaultCustomerName: 'BATARA BEKASI',
   loketTitle: 'LOKET PPOB ATHAR DIGITAL PAYMENT',
   loketAddress: 'JL Raya Bapuhbandung glagah',
   adminFee: 5000,
@@ -37,7 +37,7 @@ export default function App() {
       try { return JSON.parse(saved); } catch (e) { /* ignore */ }
     }
     // Default initial sample
-    const sample = generateRandomReceipt();
+    const sample = generateRandomReceipt(settings.defaultCustomerName);
     return [sample];
   });
 
@@ -81,7 +81,7 @@ export default function App() {
     const sharedText = params.get('text') || params.get('title');
     if (sharedText) {
       // If shared from another app, create a receipt with the text
-      const sample = generateRandomReceipt();
+      const sample = generateRandomReceipt(settings.defaultCustomerName);
       sample.namaPelanggan = `SHARED: ${sharedText.substring(0, 30)}`;
       handleReceiptScanned(sample);
     }

@@ -14,7 +14,7 @@ export interface ReceiptData {
 }
 
 export interface AppSettings {
-  agentName: string;
+  defaultCustomerName: string;
   loketTitle: string;
   loketAddress: string;
   adminFee: number;

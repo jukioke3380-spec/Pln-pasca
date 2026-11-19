@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Camera, Edit3, Printer, Settings as SettingsIcon, History as HistoryIcon, Download } from 'lucide-react';
+import { Camera, Edit3, Printer, Settings as SettingsIcon, History as HistoryIcon, Download, Smartphone, X } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -41,13 +41,14 @@ export function usePWAInstall() {
   }, []);
 
   const install = async () => {
-    if (!deferredPrompt) return false;
-    await deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setIsInstalled(true);
-      setDeferredPrompt(null);
-      return true;
+    if (deferredPrompt) {
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+        setDeferredPrompt(null);
+        return true;
+      }
     }
     return false;
   };
@@ -57,55 +58,82 @@ export function usePWAInstall() {
 
 export const PWAInstallButton: React.FC = () => {
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
-  const [showIOSGuide, setShowIOSGuide] = useState(false);
+  const [showInstallModal, setShowInstallModal] = useState(false);
 
   if (isInstalled) return null;
 
-  if (isInstallable) {
-    return (
+  const handleInstallClick = async () => {
+    if (isInstallable) {
+      const success = await install();
+      if (!success) {
+        setShowInstallModal(true);
+      }
+    } else {
+      setShowInstallModal(true);
+    }
+  };
+
+  return (
+    <>
       <button
-        onClick={install}
-        className="flex items-center gap-1.5 rounded-lg bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-sky-700 transition"
+        onClick={handleInstallClick}
+        className="flex items-center gap-1.5 rounded-lg bg-sky-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-sky-700 transition animate-pulse"
       >
-        <Download className="w-3.5 h-3.5" />
-        Install App
+        <Smartphone className="w-3.5 h-3.5" />
+        Install PWA
       </button>
-    );
-  }
 
-  if (isIOS) {
-    return (
-      <>
-        <button
-          onClick={() => setShowIOSGuide(true)}
-          className="flex items-center gap-1.5 rounded-lg border border-sky-300 px-3 py-1.5 text-xs font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 transition"
-        >
-          <Download className="w-3.5 h-3.5" />
-          Install iOS
-        </button>
+      {showInstallModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-slate-900 p-6 shadow-2xl text-left relative space-y-4 border border-slate-200 dark:border-slate-800">
+            <button
+              onClick={() => setShowInstallModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            >
+              <X className="w-5 h-5" />
+            </button>
 
-        {showIOSGuide && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900 text-left">
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">Install di iPhone / iPad</h3>
-              <p className="mt-2 text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                1. Ketuk tombol <strong>Share</strong> (Bagikan) di toolbar browser Safari.<br />
-                2. Gulir ke bawah lalu ketuk <strong>Add to Home Screen</strong> (Tambah ke Layar Utama).
-              </p>
-              <button
-                onClick={() => setShowIOSGuide(false)}
-                className="mt-4 w-full rounded-xl bg-sky-600 py-2.5 text-xs font-semibold text-white hover:bg-sky-700 transition"
-              >
-                Mengerti
-              </button>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center">
+                <Smartphone className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Cara Install Aplikasi di HP</h3>
+                <p className="text-xs text-slate-500">Aplikasi siap dipasang seperti aplikasi native.</p>
+              </div>
             </div>
-          </div>
-        )}
-      </>
-    );
-  }
 
-  return null;
+            <div className="space-y-3 text-xs text-slate-700 dark:text-slate-300 leading-relaxed pt-2">
+              <div className="p-3 bg-sky-50 dark:bg-slate-800 rounded-2xl space-y-1">
+                <p className="font-bold text-sky-900 dark:text-sky-200">📱 Pengguna Android (Google Chrome):</p>
+                <ol className="list-decimal list-inside space-y-1 pl-1">
+                  <li>Ketuk ikon menu titik tiga (<span className="font-bold">︙</span>) di sudut kanan atas browser Chrome.</li>
+                  <li>Pilih opsi <strong className="text-sky-700">"Install app"</strong> atau <strong className="text-sky-700">"Add to Home screen"</strong> (Tambahkan ke Layar Utama).</li>
+                  <li>Ketuk <strong className="text-sky-700">Install</strong> / Konfirmasi. Aplikasi akan terpasang di HP Anda!</li>
+                </ol>
+              </div>
+
+              <div className="p-3 bg-blue-50 dark:bg-slate-800 rounded-2xl space-y-1">
+                <p className="font-bold text-blue-900 dark:text-blue-200">🍏 Pengguna iPhone / iPad (Safari):</p>
+                <ol className="list-decimal list-inside space-y-1 pl-1">
+                  <li>Ketuk tombol <strong className="text-blue-700">Share</strong> (Bagikan dengan ikon kotak panah ke atas) di bilah bawah/atas Safari.</li>
+                  <li>Gulir menu ke bawah lalu ketuk <strong className="text-blue-700">"Add to Home Screen"</strong> (Tambah ke Layar Utama).</li>
+                  <li>Ketuk <strong className="text-blue-700">Add</strong> (Tambah). Selesai!</li>
+                </ol>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowInstallModal(false)}
+              className="mt-2 w-full rounded-xl bg-sky-600 py-3 text-xs font-bold text-white hover:bg-sky-700 transition shadow-md"
+            >
+              Mengerti & Tutup
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 interface NavbarProps {

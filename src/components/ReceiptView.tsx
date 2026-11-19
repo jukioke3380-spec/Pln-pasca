@@ -25,57 +25,66 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ receipt, settings, inn
         <p className="text-[10px] text-slate-600 mt-0.5">{settings.loketAddress}</p>
       </div>
 
-      <div className="text-center font-bold text-xs tracking-wide py-1 mb-2 bg-sky-50 text-sky-900 rounded">
+      <div className="text-center font-bold text-xs tracking-wide py-1 mb-3 bg-sky-50 text-sky-900 rounded">
         STRUK PEMBAYARAN TAGIHAN LISTRIK
       </div>
 
-      {/* Details */}
-      <div className="space-y-1 text-xs mb-3 border-b border-dashed border-slate-300 pb-3">
-        <div className="flex justify-between">
+      {/* Details with Colon separator */}
+      <div className="space-y-1.5 text-xs mb-3 border-b border-dashed border-slate-300 pb-3">
+        <div className="grid grid-cols-[95px_12px_1fr] items-start">
           <span className="text-slate-600">Tgl / Waktu</span>
+          <span className="text-center">:</span>
           <span className="font-semibold">{receipt.tanggal}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="grid grid-cols-[95px_12px_1fr] items-start">
           <span className="text-slate-600">No. Ref</span>
+          <span className="text-center">:</span>
           <span className="font-semibold">{receipt.noRef}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="grid grid-cols-[95px_12px_1fr] items-start">
           <span className="text-slate-600">IDPel</span>
+          <span className="text-center">:</span>
           <span className="font-bold text-sky-700">{receipt.idpel}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="grid grid-cols-[95px_12px_1fr] items-start">
           <span className="text-slate-600">Nama</span>
-          <span className="font-bold text-right truncate max-w-[180px]">{receipt.namaPelanggan}</span>
+          <span className="text-center">:</span>
+          <span className="font-bold text-slate-900 uppercase">{receipt.namaPelanggan}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="grid grid-cols-[95px_12px_1fr] items-start">
           <span className="text-slate-600">Tarif / Daya</span>
-          <span>{receipt.tarifDaya}</span>
+          <span className="text-center">:</span>
+          <span className="font-semibold">{receipt.tarifDaya}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="grid grid-cols-[95px_12px_1fr] items-start">
           <span className="text-slate-600">BLN / THN</span>
+          <span className="text-center">:</span>
           <span>{receipt.blnThn}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="grid grid-cols-[95px_12px_1fr] items-start">
           <span className="text-slate-600">Stand Meter</span>
+          <span className="text-center">:</span>
           <span>{receipt.standMeter}</span>
         </div>
       </div>
 
       {/* Financials */}
-      <div className="space-y-1 text-xs mb-3 border-b border-dashed border-slate-300 pb-3">
-        <div className="flex justify-between">
+      <div className="space-y-1.5 text-xs mb-3 border-b border-dashed border-slate-300 pb-3">
+        <div className="grid grid-cols-[95px_12px_1fr] items-start">
           <span className="text-slate-600">Rp Tag PLN</span>
+          <span className="text-center">:</span>
           <span>{formatCurrency(receipt.rpTagPln)}</span>
         </div>
-        <div className="flex justify-between">
+        <div className="grid grid-cols-[95px_12px_1fr] items-start">
           <span className="text-slate-600">Admin Bank</span>
+          <span className="text-center">:</span>
           <span>{formatCurrency(receipt.adminBank)}</span>
         </div>
       </div>
 
       {/* Total */}
       <div className="flex justify-between items-center text-sm font-bold bg-sky-100 text-sky-950 p-2.5 rounded-lg mb-4">
-        <span>TOTAL BAYAR</span>
+        <span>TOTAL BAYAR :</span>
         <span className="text-base text-sky-700">{formatCurrency(receipt.totalBayar)}</span>
       </div>
 

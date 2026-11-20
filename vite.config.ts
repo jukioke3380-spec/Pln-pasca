@@ -10,9 +10,25 @@ export default defineConfig(() => {
     plugins: [
       react(),
       tailwindcss(),
+      {
+        name: 'ensure-pwa-png-icons',
+        configResolved() {
+          const publicDir = path.resolve(__dirname, 'public');
+          const srcIcon = path.resolve(__dirname, 'src/assets/images/pwa_icon_512_1795181470147.jpg');
+          if (fs.existsSync(srcIcon)) {
+            if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+            const target512 = path.resolve(publicDir, 'pwa-512x512.png');
+            const target192 = path.resolve(publicDir, 'pwa-192x192.png');
+            const targetApple = path.resolve(publicDir, 'apple-touch-icon.png');
+            if (!fs.existsSync(target512)) fs.copyFileSync(srcIcon, target512);
+            if (!fs.existsSync(target192)) fs.copyFileSync(srcIcon, target192);
+            if (!fs.existsSync(targetApple)) fs.copyFileSync(srcIcon, targetApple);
+          }
+        }
+      },
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'icon.svg'],
+        includeAssets: ['favicon.ico', 'icon.svg', 'pwa-192x192.png', 'pwa-512x512.png', 'apple-touch-icon.png'],
         manifest: {
           id: '/',
           name: 'Struk Pembayaran Tagihan Listrik',
@@ -40,10 +56,22 @@ export default defineConfig(() => {
           },
           icons: [
             {
+              src: '/pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'any'
+            },
+            {
+              src: '/pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable'
+            },
+            {
               src: '/icon.svg',
               sizes: 'any',
               type: 'image/svg+xml',
-              purpose: 'any maskable'
+              purpose: 'any'
             }
           ]
         },
@@ -77,10 +105,7 @@ export default defineConfig(() => {
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };

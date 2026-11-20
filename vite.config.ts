@@ -25,11 +25,11 @@ export default defineConfig(() => {
           scope: '/',
           share_target: {
             action: '/',
-            method: 'GET',
+            method: 'POST',
+            enctype: 'multipart/form-data',
             params: {
               title: 'title',
               text: 'text',
-              url: 'url',
               files: [
                 {
                   name: 'image',

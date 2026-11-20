@@ -15,7 +15,7 @@ import { generateRandomReceipt } from './utils/ocr';
 
 const DEFAULT_SETTINGS: AppSettings = {
   defaultCustomerName: 'ERFAI',
-  loketTitle: 'LOKET PPOB ATHAR DIGITAL PAYMENT',
+  loketTitle: 'LOKET PPOB ATHAR DIGITAL',
   loketAddress: 'JL Raya Bapuhbandung glagah',
   adminFee: 5000,
 };

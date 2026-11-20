@@ -72,20 +72,18 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
   };
 
   const handleDownloadImage = async () => {
-    if (!receiptRef.current) return;
     try {
-      await exportReceiptAsImage(receiptRef.current, `struk-pln-${receipt.idpel}.png`);
-      alert('Gambar struk berhasil disimpan!');
+      await exportReceiptAsImage(receipt, settings, `struk-pln-${receipt.idpel}.png`);
+      alert('Gambar struk berhasil disimpan ke perangkat/galeri!');
     } catch (err) {
       alert('Gagal menyimpan gambar.');
     }
   };
 
   const handleShareImage = async () => {
-    if (!receiptRef.current) return;
     setIsSharing(true);
     try {
-      await shareReceiptImage(receiptRef.current, `struk-pln-${receipt.idpel}.png`);
+      await shareReceiptImage(receipt, settings, `struk-pln-${receipt.idpel}.png`);
     } catch (err) {
       console.error(err);
     } finally {

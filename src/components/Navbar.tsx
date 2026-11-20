@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Camera, Edit3, Printer, Settings as SettingsIcon, History as HistoryIcon, Download, Smartphone, X } from 'lucide-react';
+import { Camera, Edit3, Printer, Settings as SettingsIcon, History as HistoryIcon, Download, Smartphone, X, ExternalLink } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -73,6 +73,10 @@ export const PWAInstallButton: React.FC = () => {
     }
   };
 
+  const handleOpenNewTab = () => {
+    window.open(window.location.href, '_blank');
+  };
+
   return (
     <>
       <button
@@ -99,35 +103,43 @@ export const PWAInstallButton: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-base font-bold text-slate-900 dark:text-white">Cara Install Aplikasi di HP</h3>
-                <p className="text-xs text-slate-500">Aplikasi siap dipasang seperti aplikasi native.</p>
+                <p className="text-xs text-slate-500">Buka di tab baru browser untuk instalasi instan.</p>
               </div>
             </div>
 
-            <div className="space-y-3 text-xs text-slate-700 dark:text-slate-300 leading-relaxed pt-2">
+            {/* Quick Open in New Tab Button */}
+            <button
+              onClick={handleOpenNewTab}
+              className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-3 px-4 rounded-xl text-xs font-bold shadow-md transition"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Buka di Tab Baru (Agar Tombol Install Muncul)
+            </button>
+
+            <div className="space-y-3 text-xs text-slate-700 dark:text-slate-300 leading-relaxed pt-1">
               <div className="p-3 bg-sky-50 dark:bg-slate-800 rounded-2xl space-y-1">
                 <p className="font-bold text-sky-900 dark:text-sky-200">📱 Pengguna Android (Google Chrome):</p>
                 <ol className="list-decimal list-inside space-y-1 pl-1">
-                  <li>Ketuk ikon menu titik tiga (<span className="font-bold">︙</span>) di sudut kanan atas browser Chrome.</li>
-                  <li>Pilih opsi <strong className="text-sky-700">"Install app"</strong> atau <strong className="text-sky-700">"Add to Home screen"</strong> (Tambahkan ke Layar Utama).</li>
-                  <li>Ketuk <strong className="text-sky-700">Install</strong> / Konfirmasi. Aplikasi akan terpasang di HP Anda!</li>
+                  <li>Klik tombol <strong className="text-emerald-700">"Buka di Tab Baru"</strong> di atas.</li>
+                  <li>Ketuk menu titik tiga (<span className="font-bold">︙</span>) di sudut kanan atas browser Chrome.</li>
+                  <li>Pilih <strong className="text-sky-700">"Install app"</strong> atau <strong className="text-sky-700">"Add to Home screen"</strong>.</li>
                 </ol>
               </div>
 
               <div className="p-3 bg-blue-50 dark:bg-slate-800 rounded-2xl space-y-1">
                 <p className="font-bold text-blue-900 dark:text-blue-200">🍏 Pengguna iPhone / iPad (Safari):</p>
                 <ol className="list-decimal list-inside space-y-1 pl-1">
-                  <li>Ketuk tombol <strong className="text-blue-700">Share</strong> (Bagikan dengan ikon kotak panah ke atas) di bilah bawah/atas Safari.</li>
-                  <li>Gulir menu ke bawah lalu ketuk <strong className="text-blue-700">"Add to Home Screen"</strong> (Tambah ke Layar Utama).</li>
-                  <li>Ketuk <strong className="text-blue-700">Add</strong> (Tambah). Selesai!</li>
+                  <li>Ketuk tombol <strong className="text-blue-700">Share</strong> (ikon kotak panah ke atas) di bilah bawah Safari.</li>
+                  <li>Pilih <strong className="text-blue-700">"Add to Home Screen"</strong> (Tambah ke Layar Utama).</li>
                 </ol>
               </div>
             </div>
 
             <button
               onClick={() => setShowInstallModal(false)}
-              className="mt-2 w-full rounded-xl bg-sky-600 py-3 text-xs font-bold text-white hover:bg-sky-700 transition shadow-md"
+              className="mt-1 w-full rounded-xl bg-slate-200 dark:bg-slate-800 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-300 transition"
             >
-              Mengerti & Tutup
+              Tutup
             </button>
           </div>
         </div>

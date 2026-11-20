@@ -42,7 +42,6 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
   let noRef = '';
   let tanggal = new Date().toISOString().replace('T', ' ').substring(0, 19);
 
-  // Improved regex for UOB TMRW / PLN Pascabayar receipts
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const upper = line.toUpperCase();
@@ -58,15 +57,14 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
     }
 
     // NAMA
-    if (!namaPelanggan && (upper.includes('NAMA') || upper.includes('NM'))) {
-      const nextLine = lines[i + 1] || '';
-      const cleanName = nextLine.replace(/^[:\s]+/, '').trim();
-      if (cleanName && cleanName.length > 1 && !cleanName.includes('TARIF') && !cleanName.includes('DAYA')) {
-        namaPelanggan = cleanName;
-      } else {
-        const parts = line.split(/[:]/);
-        if (parts[1] && parts[1].trim().length > 1) {
-          namaPelanggan = parts[1].trim();
+    if (!namaPelanggan && (upper === 'NAMA' || upper.includes('NAMA') || upper === 'NM' || upper.includes('NMA'))) {
+      const parts = line.split(/[:]/);
+      if (parts[1] && parts[1].trim().length > 1) {
+        namaPelanggan = parts[1].trim();
+      } else if (lines[i + 1]) {
+        const nextLine = lines[i + 1].replace(/^[:\s-]+/, '').trim();
+        if (nextLine && nextLine.length > 1 && !/TARIF|DAYA|IDPEL|PLN|BL|TH|STAND|REF|ADMIN|RP/i.test(nextLine)) {
+          namaPelanggan = nextLine;
         }
       }
     }

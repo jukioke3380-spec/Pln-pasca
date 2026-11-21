@@ -145,20 +145,11 @@ function generateReceiptCanvas(receipt: ReceiptData, settings: AppSettings): HTM
   drawRow('Rp Tag PLN', formatCurrency(receipt.rpTagPln));
   drawRow('Admin Bank', formatCurrency(receipt.adminBank));
 
-  // Dashed separator line below admin bank (matching Total Bayar width from leftX)
-  ctx.strokeStyle = '#000000';
-  ctx.lineWidth = 5;
-  ctx.setLineDash([12, 12]);
-  ctx.beginPath();
-  ctx.moveTo(leftX, y - 15);
-  ctx.lineTo(canvas.width - 70, y - 15);
-  ctx.stroke();
-  ctx.setLineDash([]);
-  y += 25;
+  // NO dashed separator line above total bayar
 
   // Total Bayar (Aligned with columns above)
   drawRow('TOTAL BAYAR', formatCurrency(receipt.totalBayar));
-  y += 30;
+  y += 35;
 
   // Footer with black background block containing only closing text
   ctx.fillStyle = '#000000';
@@ -167,9 +158,9 @@ function generateReceiptCanvas(receipt: ReceiptData, settings: AppSettings): HTM
   ctx.font = '900 34px "Courier New", Courier, monospace';
   ctx.textAlign = 'center';
   ctx.fillText('SIMPAN STRUK INI SEBAGAI BUKTI PEMBAYARAN', canvas.width / 2, y + 8);
-  y += 85;
+  y += 60;
 
-  // Dashed separator line above TERIMAKASIH
+  // Dashed separator line above TERIMAKASIH (closer to black block)
   ctx.strokeStyle = '#000000';
   ctx.lineWidth = 5;
   ctx.setLineDash([12, 12]);

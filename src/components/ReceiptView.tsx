@@ -68,14 +68,14 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ receipt, settings, inn
         </div>
       </div>
 
-      {/* Financials with dashed line below admin bank (length matching Total Bayar width) */}
+      {/* Financials without dashed line above total bayar */}
       <div className="space-y-4 text-xl sm:text-2xl mb-4 text-black font-black">
         <div className="grid grid-cols-[160px_20px_1fr] items-start">
           <span className="text-black font-black">Rp Tag PLN</span>
           <span className="text-center font-black">:</span>
           <span className="text-black font-black">{formatCurrency(receipt.rpTagPln)}</span>
         </div>
-        <div className="grid grid-cols-[160px_20px_1fr] items-start border-b-4 border-dashed border-black pb-4">
+        <div className="grid grid-cols-[160px_20px_1fr] items-start">
           <span className="text-black font-black">Admin Bank</span>
           <span className="text-center font-black">:</span>
           <span className="text-black font-black">{formatCurrency(receipt.adminBank)}</span>
@@ -90,12 +90,12 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ receipt, settings, inn
       </div>
 
       {/* Footer with black background block containing only closing text */}
-      <div className="bg-black text-white p-4 rounded-2xl text-center text-xl sm:text-2xl font-black mb-6">
+      <div className="bg-black text-white p-4 rounded-2xl text-center text-xl sm:text-2xl font-black mb-2">
         <p className="uppercase tracking-tight">Simpan struk ini sebagai bukti pembayaran</p>
       </div>
 
-      {/* Dashed line above TERIMAKASIH */}
-      <div className="border-t-4 border-dashed border-black pt-4">
+      {/* Dashed line above TERIMAKASIH (closer to black block) */}
+      <div className="border-t-4 border-dashed border-black pt-2">
         <div className="text-center text-xl sm:text-2xl text-black font-black uppercase">
           TERIMAKASIH
         </div>

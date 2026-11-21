@@ -39,21 +39,7 @@ export default defineConfig(() => {
           display: 'standalone',
           start_url: '/',
           scope: '/',
-          share_target: {
-            action: '/',
-            method: 'POST',
-            enctype: 'multipart/form-data',
-            params: {
-              title: 'title',
-              text: 'text',
-              files: [
-                {
-                  name: 'image',
-                  accept: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp']
-                }
-              ]
-            }
-          },
+
           icons: [
             {
               src: '/pwa-192x192.png',

@@ -92,11 +92,15 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
       if (matchBln) blnThn = matchBln[1];
     }
 
-    // STAND METER
+    // STAND METER (5 digit spasi 5 digit)
     if (!standMeter && (upper.includes('STAND') || upper.includes('METER'))) {
       const nextLine = lines[i + 1] || '';
-      const matchStand = (line + ' ' + nextLine).match(/(\d{6,}-\d{6,})/);
-      if (matchStand) standMeter = matchStand[1];
+      const matchStand = (line + ' ' + nextLine).match(/(\d{5,8})[-\s]+(\d{5,8})/);
+      if (matchStand) {
+        const s1 = matchStand[1].slice(-5);
+        const s2 = matchStand[2].slice(-5);
+        standMeter = `${s1} ${s2}`;
+      }
     }
 
     // RP TAG PLN
@@ -123,7 +127,7 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
   if (!namaPelanggan) namaPelanggan = defaultCustomerName || 'ERFAI';
   if (!tarifDaya) tarifDaya = 'R1 / 450 VA';
   if (!blnThn) blnThn = 'NOV 26';
-  if (!standMeter) standMeter = '00027660-00027775';
+  if (!standMeter) standMeter = '27660 27775';
   if (rpTagPln === 0) rpTagPln = 52850;
   if (!noRef) noRef = '2611193235680534';
 
@@ -147,7 +151,7 @@ export function generateRandomReceipt(defaultCustomerName = 'ERFAI'): ReceiptDat
   const namaPelanggan = defaultCustomerName || 'ERFAI';
   const tarifDaya = 'R1 / 450 VA';
   const blnThn = 'NOV 26';
-  const standMeter = '00027660-00027775';
+  const standMeter = '27660 27775';
   const rpTagPln = 52850;
   const adminBank = 5000;
   const totalBayar = rpTagPln + adminBank;

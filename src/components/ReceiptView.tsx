@@ -30,7 +30,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ receipt, settings, inn
       </div>
 
       {/* Details with Colon separator */}
-      <div className="space-y-4 text-xl sm:text-2xl mb-6 border-b-4 border-dashed border-black pb-6 text-black font-black">
+      <div className="space-y-4 text-xl sm:text-2xl mb-4 text-black font-black">
         <div className="grid grid-cols-[160px_20px_1fr] items-start">
           <span className="text-black font-black">Tgl / Waktu</span>
           <span className="text-center font-black">:</span>
@@ -68,30 +68,37 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ receipt, settings, inn
         </div>
       </div>
 
-      {/* Financials */}
-      <div className="space-y-4 text-xl sm:text-2xl mb-6 border-b-4 border-dashed border-black pb-6 text-black font-black">
+      {/* Financials with dashed line below admin bank (length matching Total Bayar width) */}
+      <div className="space-y-4 text-xl sm:text-2xl mb-4 text-black font-black">
         <div className="grid grid-cols-[160px_20px_1fr] items-start">
           <span className="text-black font-black">Rp Tag PLN</span>
           <span className="text-center font-black">:</span>
           <span className="text-black font-black">{formatCurrency(receipt.rpTagPln)}</span>
         </div>
-        <div className="grid grid-cols-[160px_20px_1fr] items-start">
+        <div className="grid grid-cols-[160px_20px_1fr] items-start border-b-4 border-dashed border-black pb-4">
           <span className="text-black font-black">Admin Bank</span>
           <span className="text-center font-black">:</span>
           <span className="text-black font-black">{formatCurrency(receipt.adminBank)}</span>
         </div>
       </div>
 
-      {/* Total */}
-      <div className="flex justify-between items-center text-2xl sm:text-3xl font-black bg-black text-white p-5 rounded-2xl mb-6">
-        <span>TOTAL BAYAR :</span>
-        <span className="text-white font-black">{formatCurrency(receipt.totalBayar)}</span>
+      {/* Total (Aligned with columns above) */}
+      <div className="grid grid-cols-[160px_20px_1fr] items-start text-xl sm:text-2xl font-black text-black mb-6">
+        <span className="text-black font-black">TOTAL BAYAR</span>
+        <span className="text-center font-black">:</span>
+        <span className="text-black font-black">{formatCurrency(receipt.totalBayar)}</span>
       </div>
 
-      {/* Footer */}
-      <div className="text-center text-lg sm:text-xl text-black font-black space-y-2.5">
-        <p className="uppercase">Simpan struk ini sebagai bukti pembayaran yang sah.</p>
-        <p className="font-black text-black">TERIMAKASIH</p>
+      {/* Footer with black background block containing only closing text */}
+      <div className="bg-black text-white p-4 rounded-2xl text-center text-xl sm:text-2xl font-black mb-6">
+        <p className="uppercase tracking-tight">Simpan struk ini sebagai bukti pembayaran</p>
+      </div>
+
+      {/* Dashed line above TERIMAKASIH */}
+      <div className="border-t-4 border-dashed border-black pt-4">
+        <div className="text-center text-xl sm:text-2xl text-black font-black uppercase">
+          TERIMAKASIH
+        </div>
       </div>
     </div>
   );

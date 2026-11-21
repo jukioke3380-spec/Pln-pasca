@@ -142,7 +142,34 @@ function generateReceiptCanvas(receipt: ReceiptData, settings: AppSettings): HTM
   drawRow('BLN / THN', receipt.blnThn);
   drawRow('Stand Meter', receipt.standMeter);
 
-  // Dashed separator line
+  drawRow('Rp Tag PLN', formatCurrency(receipt.rpTagPln));
+  drawRow('Admin Bank', formatCurrency(receipt.adminBank));
+
+  // Dashed separator line below admin bank (matching Total Bayar width from leftX)
+  ctx.strokeStyle = '#000000';
+  ctx.lineWidth = 5;
+  ctx.setLineDash([12, 12]);
+  ctx.beginPath();
+  ctx.moveTo(leftX, y - 15);
+  ctx.lineTo(canvas.width - 70, y - 15);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  y += 25;
+
+  // Total Bayar (Aligned with columns above)
+  drawRow('TOTAL BAYAR', formatCurrency(receipt.totalBayar));
+  y += 30;
+
+  // Footer with black background block containing only closing text
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(70, y - 42, canvas.width - 140, 76);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 34px "Courier New", Courier, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('SIMPAN STRUK INI SEBAGAI BUKTI PEMBAYARAN', canvas.width / 2, y + 8);
+  y += 85;
+
+  // Dashed separator line above TERIMAKASIH
   ctx.strokeStyle = '#000000';
   ctx.lineWidth = 5;
   ctx.setLineDash([12, 12]);
@@ -151,37 +178,10 @@ function generateReceiptCanvas(receipt: ReceiptData, settings: AppSettings): HTM
   ctx.lineTo(canvas.width - 70, y);
   ctx.stroke();
   ctx.setLineDash([]);
-  y += 65;
+  y += 45;
 
-  drawRow('Rp Tag PLN', formatCurrency(receipt.rpTagPln));
-  drawRow('Admin Bank', formatCurrency(receipt.adminBank));
-
-  // Dashed separator line
-  ctx.strokeStyle = '#000000';
-  ctx.setLineDash([12, 12]);
-  ctx.beginPath();
-  ctx.moveTo(70, y);
-  ctx.lineTo(canvas.width - 70, y);
-  ctx.stroke();
-  ctx.setLineDash([]);
-  y += 65;
-
-  // Total Bayar Box
+  // TERIMAKASIH outside black block
   ctx.fillStyle = '#000000';
-  ctx.fillRect(70, y - 48, canvas.width - 140, 86);
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '900 44px "Courier New", Courier, monospace';
-  ctx.fillText('TOTAL BAYAR :', leftX + 10, y + 10);
-  ctx.textAlign = 'right';
-  ctx.fillText(formatCurrency(receipt.totalBayar), canvas.width - 95, y + 10);
-  y += 120;
-
-  // Footer
-  ctx.textAlign = 'center';
-  ctx.font = '900 28px "Courier New", Courier, monospace';
-  ctx.fillStyle = '#000000';
-  ctx.fillText('SIMPAN STRUK INI SEBAGAI BUKTI PEMBAYARAN YANG SAH.', canvas.width / 2, y);
-  y += 50;
   ctx.font = '900 38px "Courier New", Courier, monospace';
   ctx.fillText('TERIMAKASIH', canvas.width / 2, y);
 

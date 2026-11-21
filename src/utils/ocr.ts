@@ -40,18 +40,27 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
   let standMeter = '';
   let rpTagPln = 0;
   let noRef = '';
-  let tanggal = '19 Nov 2026 17:05:00';
+  let tanggal = '';
+
+  // Dynamic Date & Time extraction from uploaded image
+  let foundDate = '';
+  let foundTime = '17:05 WIB';
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const upper = line.toUpperCase();
 
-    // TANGGAL / WAKTU from image
-    const matchDate = (line + ' ' + (lines[i+1] || '')).match(/(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})/);
-    const matchTime = (line + ' ' + (lines[i+1] || '')).match(/(\d{2}:\d{2}(?::\d{2})?)/);
-    if (matchDate) {
-      const timePart = matchTime ? matchTime[1] : '17:05:00';
-      tanggal = `${matchDate[1]} ${timePart}`;
+    // Check date pattern in line or next line
+    const combinedLine = line + ' ' + (lines[i + 1] || '');
+    const matchDate = combinedLine.match(/(\d{1,2}\s+(?:Jan|Feb|Mar|Apr|Mei|Jun|Jul|Agu|Sep|Okt|Nov|Des|[A-Za-z]{3})\s+\d{4})/i) ||
+                      combinedLine.match(/(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/);
+    const matchTime = combinedLine.match(/(\d{2}:\d{2}(?::\d{2})?\s*(?:WIB|WITA|WIT)?)/i);
+
+    if (matchDate && !foundDate) {
+      foundDate = matchDate[1];
+    }
+    if (matchTime) {
+      foundTime = matchTime[1];
     }
 
     // IDPEL
@@ -130,6 +139,14 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
     }
   }
 
+  if (foundDate) {
+    tanggal = `${foundDate} ${foundTime}`;
+  } else {
+    const d = new Date();
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    tanggal = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} 17:05 WIB`;
+  }
+
   // Fallbacks matching the user's sample receipt (Erfai, R1 / 450 VA)
   if (!idpel) idpel = '518030613503';
   if (!namaPelanggan) namaPelanggan = defaultCustomerName || 'ERFAI';
@@ -152,7 +169,9 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
 }
 
 export function generateRandomReceipt(defaultCustomerName = 'ERFAI'): ReceiptData {
-  const tanggal = '19 Nov 2026 17:05:00';
+  const d = new Date();
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const tanggal = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} 17:05 WIB`;
   const noRef = '261119' + Math.floor(1000000000 + Math.random() * 9000000000);
   const idpel = '518030613503';
   const namaPelanggan = defaultCustomerName || 'ERFAI';

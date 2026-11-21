@@ -40,11 +40,19 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
   let standMeter = '';
   let rpTagPln = 0;
   let noRef = '';
-  let tanggal = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  let tanggal = '19 Nov 2026 17:05:00';
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const upper = line.toUpperCase();
+
+    // TANGGAL / WAKTU from image
+    const matchDate = (line + ' ' + (lines[i+1] || '')).match(/(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})/);
+    const matchTime = (line + ' ' + (lines[i+1] || '')).match(/(\d{2}:\d{2}(?::\d{2})?)/);
+    if (matchDate) {
+      const timePart = matchTime ? matchTime[1] : '17:05:00';
+      tanggal = `${matchDate[1]} ${timePart}`;
+    }
 
     // IDPEL
     if (!idpel && (upper.includes('IDPEL') || upper.includes('PELANGGAN'))) {
@@ -92,14 +100,14 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
       if (matchBln) blnThn = matchBln[1];
     }
 
-    // STAND METER (5 digit spasi 5 digit)
+    // STAND METER (5 digit - 5 digit)
     if (!standMeter && (upper.includes('STAND') || upper.includes('METER'))) {
       const nextLine = lines[i + 1] || '';
       const matchStand = (line + ' ' + nextLine).match(/(\d{5,8})[-\s]+(\d{5,8})/);
       if (matchStand) {
         const s1 = matchStand[1].slice(-5);
         const s2 = matchStand[2].slice(-5);
-        standMeter = `${s1} ${s2}`;
+        standMeter = `${s1}-${s2}`;
       }
     }
 
@@ -127,7 +135,7 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
   if (!namaPelanggan) namaPelanggan = defaultCustomerName || 'ERFAI';
   if (!tarifDaya) tarifDaya = 'R1 / 450 VA';
   if (!blnThn) blnThn = 'NOV 26';
-  if (!standMeter) standMeter = '27660 27775';
+  if (!standMeter) standMeter = '27660-27775';
   if (rpTagPln === 0) rpTagPln = 52850;
   if (!noRef) noRef = '2611193235680534';
 
@@ -144,14 +152,13 @@ function parseReceiptText(text: string, defaultCustomerName = 'ERFAI'): Partial<
 }
 
 export function generateRandomReceipt(defaultCustomerName = 'ERFAI'): ReceiptData {
-  const d = new Date();
   const tanggal = '19 Nov 2026 17:05:00';
   const noRef = '261119' + Math.floor(1000000000 + Math.random() * 9000000000);
   const idpel = '518030613503';
   const namaPelanggan = defaultCustomerName || 'ERFAI';
   const tarifDaya = 'R1 / 450 VA';
   const blnThn = 'NOV 26';
-  const standMeter = '27660 27775';
+  const standMeter = '27660-27775';
   const rpTagPln = 52850;
   const adminBank = 5000;
   const totalBayar = rpTagPln + adminBank;
